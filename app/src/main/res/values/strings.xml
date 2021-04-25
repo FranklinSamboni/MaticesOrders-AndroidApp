@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Orders</string>
+    <string name="white">Blanco</string>
+    <string name="black">Negro</string>
+    <string name="CC">Cédula de ciudadanía</string>
+    <string name="order_state_received">Recibido</string>
+    <string name="order_state_processing">Procesando</string>
+    <string name="order_state_sent">Enviado</string>
+    <string name="order_state_cerrado">Cerrado</string>
+    <string name="add">Agregar</string>
+    <string name="orders">Pedidos</string>
+    <string name="client_name">Nombre del Cliente</string>
+    <string name="date_created">Fecha de creación</string>
+    <string name="state">Estado</string>
+    <string name="shipper">Transportadora</string>
+    <string name="orders_count">Cantidad de articulos</string>
+    <string name="title_activity_order_detail">OrderDetailActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="save">Guardar</string>
+</resources>
