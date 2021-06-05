@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity(), OrderAdapter.OnOrderClickListener {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
+f
         setTitle(R.string.orders)
 
         setupRecyclerView()
@@ -69,7 +70,7 @@ class MainActivity : AppCompatActivity(), OrderAdapter.OnOrderClickListener {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun navigateToAddOrder() {
+    private fun navigateToAddOrder() {   
         val activity = Intent(this, AddOrderActivity::class.java)
         startActivityForResult(activity, ADD_ORDER_ACTIVITY_RESULT_CODE);
     }
@@ -81,9 +82,14 @@ class MainActivity : AppCompatActivity(), OrderAdapter.OnOrderClickListener {
     }
 
     private fun getOrders() {
-        homeViewModel.getOrders { orders ->
+        homeViewModel.getOrders { orders, error ->
             this.runOnUiThread {
-                adapter.updateOrders(orders)
+                if (!error.isEmpty()) {
+                    val toast = Toast.makeText(applicationContext, error, Toast.LENGTH_SHORT)
+                    toast.show()
+                } else {
+                    adapter.updateOrders(orders)
+                }
             }
         }
     }

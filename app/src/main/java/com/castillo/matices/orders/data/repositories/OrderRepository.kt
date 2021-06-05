@@ -22,17 +22,20 @@ class OrderRepository {
 
     fun addOrder(orderRequest: OrderRequest, completion: (success: Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = service.addOrder(orderRequest)
-            val bodyResponse = call.body()
-            if (call.isSuccessful && bodyResponse?.data != null) {
-                val order = bodyResponse.data
-                saveOrderLocally(order) {
-                    completion(true)
+            try {
+                val call = service.addOrder(orderRequest)
+                val bodyResponse = call.body()
+                if (call.isSuccessful && bodyResponse?.data != null) {
+                    val order = bodyResponse.data
+                    saveOrderLocally(order) {
+                        completion(true)
+                    }
+                } else {
+                    Log.e("API_Error", "AddOrderAPI Error " + call.errorBody())
+                    completion(false)
                 }
-            } else {
-                val error = call.errorBody()
-                Log.e("API_Error", "AddOrderAPI Error")
-                Log.e("API_Error", error.toString())
+            } catch (e: Exception) {
+                Log.e("API_Error", "AddOrderAPI Error " + e.localizedMessage)
                 completion(false)
             }
         }
@@ -40,17 +43,20 @@ class OrderRepository {
 
     fun updateOrder(orderRequest: OrderRequest, completion: (success: Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = service.updateOrder(orderRequest)
-            val bodyResponse = call.body()
-            if (call.isSuccessful && bodyResponse?.data != null) {
-                val order = bodyResponse.data
-                saveOrderLocally(order) {
-                    completion(true)
+            try {
+                val call = service.updateOrder(orderRequest)
+                val bodyResponse = call.body()
+                if (call.isSuccessful && bodyResponse?.data != null) {
+                    val order = bodyResponse.data
+                    saveOrderLocally(order) {
+                        completion(true)
+                    }
+                } else {
+                    Log.e("API_Error", "AddOrderAPI Error " +  call.errorBody())
+                    completion(false)
                 }
-            } else {
-                val error = call.errorBody()
-                Log.e("API_Error", "AddOrderAPI Error")
-                Log.e("API_Error", error.toString())
+            } catch (e: Exception) {
+                Log.e("API_Error", "AddOrderAPI Error " +  e.localizedMessage)
                 completion(false)
             }
         }
@@ -58,22 +64,27 @@ class OrderRepository {
 
 
 
-    fun getOrders(completion: (list: List<Order>) -> Unit) {
+    fun getOrders(completion: (list: List<Order>, error: String) -> Unit) {
 
         // TODO: REMOVER PARA VALIDAR CON SI HAY O NO INTERNET
         if (true) {
             CoroutineScope(Dispatchers.IO).launch {
-                val call = service.getOrders()
-                val bodyReponse = call.body()
-                if (call.isSuccessful) {
-                    val orders = bodyReponse?.data ?: emptyList()
-                    saveOrdersLocally(orders) {
-                        completion(orders)
-                    }
+                try {
+                    val call = service.getOrders()
+                    val bodyResponse = call.body()
+                    if (call.isSuccessful) {
+                        val orders = bodyResponse?.data ?: emptyList()
+                        saveOrdersLocally(orders) {
+                            completion(orders, "")
+                        }
 
-                } else {
-                    Log.e("API_Error", "GetOrderAPI Error")
-                    completion(emptyList())
+                    } else {
+                        Log.e("API_Error", "GetOrderAPI Error " + call.errorBody())
+                        completion(emptyList(), call.errorBody().toString())
+                    }
+                } catch (e: Exception) {
+                    Log.e("API_Error", "GetOrderAPI Error" + e.localizedMessage)
+                    completion(emptyList(), e.localizedMessage)
                 }
             }
 
@@ -84,9 +95,9 @@ class OrderRepository {
                     val ordersRealm: RealmResults<Order> = backgroundThreadRealm.where<Order>().findAll().sort("dateCreated", Sort.DESCENDING)
                     val orders = backgroundThreadRealm.copyFromRealm(ordersRealm)
                     backgroundThreadRealm.close()
-                    completion(orders)
+                    completion(orders, "")
                 } else {
-                    completion(emptyList())
+                    completion(emptyList(), "")
                 }
             }
 
@@ -117,16 +128,20 @@ class OrderRepository {
 
     fun addProducToOrder(request: AddProductToOrderRequest, completion: (success: Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = service.addProductToOrder(request)
-            val bodyResponse = call.body()
-            if (call.isSuccessful && bodyResponse?.data != null) {
-                val order = bodyResponse.data
-                saveOrderLocally(order) {
-                    completion(true)
+            try {
+                val call = service.addProductToOrder(request)
+                val bodyResponse = call.body()
+                if (call.isSuccessful && bodyResponse?.data != null) {
+                    val order = bodyResponse.data
+                    saveOrderLocally(order) {
+                        completion(true)
+                    }
+                } else {
+                    Log.e("API_Error", "addProducToOrder Error " + call.errorBody())
+                    completion(false)
                 }
-            } else {
-                val error = call.errorBody()
-                Log.e("API_Error", "addProducToOrder Error")
+            } catch (e: Exception) {
+                Log.e("API_Error", "addProducToOrder Error " + e.localizedMessage)
                 completion(false)
             }
         }
@@ -134,17 +149,22 @@ class OrderRepository {
 
     fun deleteOrder(orderRequest: OrderRequest, completion: (success: Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = service.deleteOrder(orderRequest)
-            val bodyResponse = call.body()
-            if (call.isSuccessful && bodyResponse?.data != null) {
-                deleteOrderLocally(orderRequest.order) {
-                    completion(true)
+            try {
+                val call = service.deleteOrder(orderRequest)
+                val bodyResponse = call.body()
+                if (call.isSuccessful && bodyResponse?.data != null) {
+                    deleteOrderLocally(orderRequest.order) {
+                        completion(true)
+                    }
+                } else {
+                    Log.e("API_Error", "deleteOrder Error " + call.errorBody())
+                    completion(false)
                 }
-            } else {
-                val error = call.errorBody()
-                Log.e("API_Error", "deleteOrder Error")
+            } catch (e: Exception) {
+                Log.e("API_Error", "deleteOrder Error " + e.localizedMessage)
                 completion(false)
             }
+
         }
     }
 

@@ -7,18 +7,24 @@ import com.castillo.matices.orders.models.Size
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class ColorRepository {
 
     fun getColors(completion: (list: List<Color>) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = APIClient().getService().getColors()
-            val bodyReponse = call.body()
-            if (call.isSuccessful) {
-                val colors = bodyReponse?.data ?: emptyList()
-                completion(colors)
-            } else {
-                Log.e("API_Error", "getColors Error")
+            try {
+                val call = APIClient().getService().getColors()
+                val bodyReponse = call.body()
+                if (call.isSuccessful) {
+                    val colors = bodyReponse?.data ?: emptyList()
+                    completion(colors)
+                } else {
+                    Log.e("API_Error", "getColors Error " + call.errorBody())
+                    completion(emptyList())
+                }
+            } catch (e: Exception) {
+                Log.e("API_Error", "getColors Error " + e.localizedMessage)
                 completion(emptyList())
             }
         }

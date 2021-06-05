@@ -22,14 +22,18 @@ class ProductRepository {
 
     fun createProduct(productRequest: ProductRequest, completion: (product: Product?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = service.createProduct(productRequest)
-            val bodyReponse = call.body()
-            if (call.isSuccessful && bodyReponse?.data != null) {
-                val product = bodyReponse.data
-                completion(product)
-            } else {
-                val error = call.errorBody()
-                Log.e("API_Error", "getDocumentTypes Error")
+            try {
+                val call = service.createProduct(productRequest)
+                val bodyReponse = call.body()
+                if (call.isSuccessful && bodyReponse?.data != null) {
+                    val product = bodyReponse.data
+                    completion(product)
+                } else {
+                    Log.e("API_Error", "createProduct Error " + call.errorBody())
+                    completion(null)
+                }
+            } catch (e: Exception) {
+                Log.e("API_Error", "createProduct Error " + e.localizedMessage)
                 completion(null)
             }
         }
@@ -37,17 +41,21 @@ class ProductRepository {
 
     fun updateProduct(productRequest: ProductRequest, completion: (product: Product?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = service.updateProduct(productRequest)
-            val bodyReponse = call.body()
-            if (call.isSuccessful && bodyReponse?.data != null) {
-                val product = bodyReponse.data
-                saveProductLocally(product) {
-                    completion(product)
-                }
+            try {
+                val call = service.updateProduct(productRequest)
+                val bodyReponse = call.body()
+                if (call.isSuccessful && bodyReponse?.data != null) {
+                    val product = bodyReponse.data
+                    saveProductLocally(product) {
+                        completion(product)
+                    }
 
-            } else {
-                val error = call.errorBody()
-                Log.e("API_Error", "getDocumentTypes Error")
+                } else {
+                    Log.e("API_Error", "updateProduct Error " + call.errorBody())
+                    completion(null)
+                }
+            } catch (e: Exception) {
+                Log.e("API_Error", "updateProduct Error " + e.localizedMessage)
                 completion(null)
             }
         }
@@ -55,16 +63,20 @@ class ProductRepository {
 
     fun deleteProduct(productRequest: ProductRequest, completion: (success: Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = service.deleteProduct(productRequest)
-            val bodyReponse = call.body()
-            if (call.isSuccessful && bodyReponse?.data != null) {
-                deleteProductLocally(productRequest.product) {
-                    completion(true)
-                }
+            try {
+                val call = service.deleteProduct(productRequest)
+                val bodyReponse = call.body()
+                if (call.isSuccessful && bodyReponse?.data != null) {
+                    deleteProductLocally(productRequest.product) {
+                        completion(true)
+                    }
 
-            } else {
-                val error = call.errorBody()
-                Log.e("API_Error", "deleteProduct Error")
+                } else {
+                    Log.e("API_Error", "deleteProduct Error " + call.errorBody())
+                    completion(false)
+                }
+            } catch (e: Exception) {
+                Log.e("API_Error", "deleteProduct Error " + e.localizedMessage)
                 completion(false)
             }
         }

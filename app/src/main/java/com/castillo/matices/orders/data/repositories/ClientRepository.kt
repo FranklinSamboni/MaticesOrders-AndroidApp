@@ -8,6 +8,7 @@ import com.castillo.matices.orders.models.IdentificationType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class ClientRepository {
 
@@ -15,14 +16,18 @@ class ClientRepository {
 
     fun createClient(clientRequest: ClientRequest, completion: (client: Client?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = service.createClient(clientRequest)
-            val bodyReponse = call.body()
-            if (call.isSuccessful && bodyReponse?.data != null) {
-                val client =  bodyReponse.data
-                completion(client)
-            } else {
-                val error = call.errorBody()
-                Log.e("API_Error", "createClient Error")
+            try {
+                val call = service.createClient(clientRequest)
+                val bodyReponse = call.body()
+                if (call.isSuccessful && bodyReponse?.data != null) {
+                    val client =  bodyReponse.data
+                    completion(client)
+                } else {
+                    Log.e("API_Error", "createClient Error " + call.errorBody())
+                    completion(null)
+                }
+            } catch (e: Exception) {
+                Log.e("API_Error", "createClient Error " + e.localizedMessage)
                 completion(null)
             }
         }
@@ -30,16 +35,21 @@ class ClientRepository {
 
     fun updateClient(clientRequest: ClientRequest, completion: (client: Client?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = service.updateClient(clientRequest)
-            val bodyReponse = call.body()
-            if (call.isSuccessful && bodyReponse?.data != null) {
-                val updatedClient =  bodyReponse.data
-                completion(updatedClient)
-            } else {
-                val error = call.errorBody()
-                Log.e("API_Error", "updateClient Error")
+            try {
+                val call = service.updateClient(clientRequest)
+                val bodyReponse = call.body()
+                if (call.isSuccessful && bodyReponse?.data != null) {
+                    val updatedClient =  bodyReponse.data
+                    completion(updatedClient)
+                } else {
+                    Log.e("API_Error", "updateClient Error " + call.errorBody())
+                    completion(null)
+                }
+            } catch (e: Exception) {
+                Log.e("API_Error", "updateClient Error " + e.localizedMessage)
                 completion(null)
             }
+
         }
     }
 }

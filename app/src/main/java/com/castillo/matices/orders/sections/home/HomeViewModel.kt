@@ -7,7 +7,7 @@ class HomeViewModel {
 
     private val repository = OrderRepository()
 
-    fun getOrders(completion: (list: List<Order>) -> Unit) {
+    fun getOrders(completion: (list: List<Order>, error: String) -> Unit) {
         return repository.getOrders(completion)
     }
 

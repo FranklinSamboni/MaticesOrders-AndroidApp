@@ -24,6 +24,22 @@ android {
         dataBinding = true
     }
 
+    flavorDimensions "environment"
+    productFlavors {
+        dev {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField "String", "BASE_URL", '\"https://givrcwb0k2.execute-api.us-east-1.amazonaws.com/dev/\"'
+        }
+        prod {
+            dimension = "environment"
+            applicationIdSuffix = ".prod"
+            versionNameSuffix = "-prod"
+            buildConfigField "String", "BASE_URL", '\"https://givrcwb0k2.execute-api.us-east-1.amazonaws.com/dev/\"'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
