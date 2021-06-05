@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), OrderAdapter.OnOrderClickListener {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-f
+
         setTitle(R.string.orders)
 
         setupRecyclerView()
