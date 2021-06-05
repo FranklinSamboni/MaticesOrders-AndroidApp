@@ -6,28 +6,34 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.castillo.matices.orders.R
+import com.castillo.matices.orders.databinding.ActivityMainBinding
 import com.castillo.matices.orders.sections.add_order.AddOrderActivity
 import com.castillo.matices.orders.sections.order_detail.OrderDetailActivity
-import com.castillo.matices.orders.models.*
 
 class MainActivity : AppCompatActivity(), OrderAdapter.OnOrderClickListener {
 
-    private var recyclerView: RecyclerView? = null
-    private var orders = getOrders()
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: OrderAdapter
+    private var homeViewModel = HomeViewModel()
+
+    private val ADD_ORDER_ACTIVITY_RESULT_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        //setSupportActionBar(findViewById(R.id.toolbar))
+        //setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         setTitle(R.string.orders)
-        recyclerView = findViewById(R.id.orders_recycler_view)
-        val adapter = OrderAdapter(this, orders, this)
-        recyclerView?.adapter = adapter
-        recyclerView?.layoutManager = LinearLayoutManager(this)
+
+        setupRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getOrders()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -47,35 +53,39 @@ class MainActivity : AppCompatActivity(), OrderAdapter.OnOrderClickListener {
         }
     }
 
-    private fun getOrders(): List<Order> {
-        val client = Client(
-                "id",
-                "La Yurany Fuentes, La Yurany Fuente La Yurany Fuente",
-                "Rengifo",
-                2131231,
-                IdentificationType.CC,
-                PhoneCode.COP,
-                "32112312",
-                "Popayan",
-                "Calle false 123")
-        val products = listOf<Product>()
-        val order1 = Order("qwesdqwe", OrderState.RECEIVED, "1619310988","1619310988",client,products,"Shipper")
-        return listOf(order1, order1, order1)
-    }
-
-    private fun navigateToAddOrder() {
-        val activity = Intent(this, AddOrderActivity::class.java)
-        startActivityForResult(activity, 1);
-    }
-
     override fun onOrderClick(position: Int) {
         Log.e("TAG","MESSAGE $position")
+        val order = adapter.orders[position]
         val activity = Intent(this, OrderDetailActivity::class.java)
+        activity.putExtra("order", order)
         startActivity(activity)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode === ADD_ORDER_ACTIVITY_RESULT_CODE) {
+            getOrders()
+        }
 
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+    private fun navigateToAddOrder() {
+        val activity = Intent(this, AddOrderActivity::class.java)
+        startActivityForResult(activity, ADD_ORDER_ACTIVITY_RESULT_CODE);
+    }
+
+    private fun setupRecyclerView() {
+        adapter = OrderAdapter(this, listOf(), this)
+        binding.ordersRecyclerView?.adapter = adapter
+        binding.ordersRecyclerView?.layoutManager = LinearLayoutManager(this)
+    }
+
+    private fun getOrders() {
+        homeViewModel.getOrders { orders ->
+            this.runOnUiThread {
+                adapter.updateOrders(orders)
+            }
+        }
+    }
+
 }

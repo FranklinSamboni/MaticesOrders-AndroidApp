@@ -1,20 +1,29 @@
 package com.castillo.matices.orders.models
 
-import android.content.Context
-import com.castillo.matices.orders.R
+import android.os.Parcel
+import android.os.Parcelable
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+import kotlinx.android.parcel.Parceler
+import kotlinx.android.parcel.Parcelize
 
-enum class Color {
-    Black,
-    White
-}
+@Parcelize
+open class Color(
+        @PrimaryKey
+        var name: String = ""): RealmObject(), Parcelable {
 
-fun Color.getDescription(context: Context) : String {
-    return when (this) {
-        Color.Black ->  context.getString(
-            R.string.black
-        )
-        Color.White -> context.getString(
-            R.string.white
-        )
+    constructor(parcel: Parcel) : this(parcel.readString()!!) {
     }
+
+    companion object : Parceler<Color> {
+
+        override fun Color.write(parcel: Parcel, flags: Int) {
+            parcel.writeString(name)
+        }
+
+        override fun create(parcel: Parcel): Color {
+            return Color(parcel)
+        }
+    }
+
 }

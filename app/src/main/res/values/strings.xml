@@ -6,7 +6,7 @@
     <string name="order_state_received">Recibido</string>
     <string name="order_state_processing">Procesando</string>
     <string name="order_state_sent">Enviado</string>
-    <string name="order_state_cerrado">Cerrado</string>
+    <string name="order_state_closed">Cerrado</string>
     <string name="add">Agregar</string>
     <string name="orders">Pedidos</string>
     <string name="client_name">Nombre del Cliente</string>
@@ -24,4 +24,13 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="save">Guardar</string>
+    <string name="sent_information">Información de envio</string>
+    <string name="products_count">Cantidad: %d</string>
+    <string name="sent_date_format">\'Envio el\' d \'de\' MMMM yyyy</string>
+    <string name="add_order">Agregar Pedido</string>
+    <string name="order_detail">Detalle de la orden</string>
+    <string name="add_product">Agregar producto</string>
+    <string name="edit_product">Editar producto</string>
+    <string name="edit_order">Editar detalles del pedido</string>
+
 </resources>

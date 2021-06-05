@@ -4,20 +4,20 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.castillo.matices.orders.R
+import com.castillo.matices.orders.databinding.TemplateOrderItemBinding
 import com.castillo.matices.orders.models.Order
-import com.castillo.matices.orders.models.getDescription
+import com.castillo.matices.orders.viewmodels.OrderViewModel
 
 class OrderAdapter(private val context: Context,
-                   private val orders: List<Order>,
+                   var orders: List<Order>,
                    private val onOrderClickListener: OnOrderClickListener
     ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.order_item, parent,false)
-        return OrderViewHolder(view, onOrderClickListener)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding: TemplateOrderItemBinding = TemplateOrderItemBinding.inflate(layoutInflater, parent, false)
+        return OrderViewHolder(binding, onOrderClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -28,17 +28,15 @@ class OrderAdapter(private val context: Context,
         val orderViewHolder = holder as OrderViewHolder
         val order = orders[position]
 
-        orderViewHolder.clientNameTextView.text = order.client?.fullname() ?: ""
-        orderViewHolder.dateCreatedTextView.text = order.dateCreatedFormatted()
-        orderViewHolder.stateTextView.text = order.state?.getDescription(context) ?: ""
-        orderViewHolder.shipperTextView.text = order.shipper
+        orderViewHolder.bind(order)
     }
 
-    class OrderViewHolder(itemView: View, val onOrderClickListener: OnOrderClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        val clientNameTextView = itemView.findViewById<TextView>(R.id.shirt_stamp_textview)
-        val dateCreatedTextView = itemView.findViewById<TextView>(R.id.shirt_size_textview)
-        val stateTextView = itemView.findViewById<TextView>(R.id.order_state_textview)
-        val shipperTextView = itemView.findViewById<TextView>(R.id.order_shipper_textview)
+    fun updateOrders(orders: List<Order>) {
+        this.orders = orders
+        notifyDataSetChanged()
+    }
+
+    class OrderViewHolder(val binding: TemplateOrderItemBinding, val onOrderClickListener: OnOrderClickListener) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
             itemView.setOnClickListener(this)
@@ -48,9 +46,13 @@ class OrderAdapter(private val context: Context,
             onOrderClickListener.onOrderClick(adapterPosition)
         }
 
+        fun bind(order: Order) {
+            binding.orderViewModel = OrderViewModel(order)
+            binding.executePendingBindings()
+        }
     }
 
-    public interface OnOrderClickListener {
+    interface OnOrderClickListener {
         fun onOrderClick(position: Int)
     }
 

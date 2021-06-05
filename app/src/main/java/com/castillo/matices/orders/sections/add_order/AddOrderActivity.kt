@@ -1,40 +1,67 @@
 package com.castillo.matices.orders.sections.add_order
 
-import android.content.Intent
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Spinner
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.castillo.matices.orders.R
+import com.castillo.matices.orders.common.DatePickerFragment
+import com.castillo.matices.orders.databinding.ActivityAddOrderBinding
 import com.castillo.matices.orders.models.*
-import com.google.android.material.textfield.TextInputLayout
-import java.lang.Exception
+import com.castillo.matices.orders.viewmodels.OrderViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
-class AddOrderActivity : AppCompatActivity() {
+class AddOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var  clientNameTextInputLayout: TextInputLayout
-    private lateinit var  identificationTypeSpinner: Spinner
-    private lateinit var  identificationNumberTextInputLayout: TextInputLayout
-    private lateinit var  phoneTextInputLayout: TextInputLayout
-    private lateinit var  cityTextInputLayout: TextInputLayout
-    private lateinit var  addressTextInputLayout: TextInputLayout
-    private lateinit var  shipperTextInputLayout: TextInputLayout
-    private lateinit var  dateSentTextInputLayout: TextInputLayout
+    private lateinit var binding: ActivityAddOrderBinding
+    private val viewModel = AddOrderViewModel()
+
+    private var documentTypes: List<IdentificationType> = emptyList()
+    private var order = Order()
+    private var client = Client()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_order)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        //setContentView(R.layout.activity_add_order)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_order)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        clientNameTextInputLayout = findViewById(R.id.client_name_textinputlayout)
-        identificationTypeSpinner = findViewById(R.id.identification_type_spinner)
-        identificationNumberTextInputLayout = findViewById(R.id.identification_number_textinputlayout)
-        phoneTextInputLayout = findViewById(R.id.phone_number_textinputlayout)
-        cityTextInputLayout = findViewById(R.id.city_textinputlayout)
-        addressTextInputLayout = findViewById(R.id.address_textinputlayout)
-        shipperTextInputLayout = findViewById(R.id.shipper_textinputlayout)
-        dateSentTextInputLayout = findViewById(R.id.date_sent_textinputlayout)
+        val editingOrder = intent.getParcelableExtra<Order>("order")
+        if (editingOrder != null) {
+            order = editingOrder!!
+            client = editingOrder.client!!
+
+            setOrderSentDate(order.dateSent)
+            setTitle(R.string.edit_order)
+        } else {
+            setTitle(R.string.add_order)
+        }
+
+        binding.client = client
+        binding.order = order
+
+        binding.dateSentTextinputlayout.editText?.setOnClickListener { view ->
+            showDatePickerDialog()
+        }
+
+        viewModel.getDocumentTypes {identificationTypes ->
+            this.runOnUiThread {
+                this.documentTypes = identificationTypes
+                setupSpinner()
+            }
+        }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -43,7 +70,7 @@ class AddOrderActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.save,menu)
+        menuInflater.inflate(R.menu.save, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -59,51 +86,70 @@ class AddOrderActivity : AppCompatActivity() {
         }
     }
 
-    fun saveOrder() {
+    private fun setupSpinner() {
+        val types = documentTypes.map { it.name }
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, types)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.identificationTypeSpinner.adapter = adapter
+        binding.identificationTypeSpinner.onItemSelectedListener = this
 
-        val clientName = clientNameTextInputLayout.editText?.text ?: ""
-        val components = clientName?.split(" ")?.toMutableList()
-        val name = components?.first() ?: ""
-        components?.removeAt(0)
-        val lastName = components?.joinToString { " " }
+        if (client.identificationType != null) {
+            var selectedIdentificationType: Int? = null
+            for ((index, value) in documentTypes.withIndex()) {
+                if (client.identificationType?.id == value.id) {
+                    selectedIdentificationType = index
+                    break
+                }
+            }
 
-        val identificationType = identificationTypeSpinner.selectedItemId
-        var identificationNumber: Int = 0
-        try {
-            identificationNumber = (identificationNumberTextInputLayout.editText?.text ?: "").toString().toInt()
-        } catch (e: Exception) {
-            print(e.localizedMessage)
+            if (selectedIdentificationType != null) {
+                binding.identificationTypeSpinner.setSelection(selectedIdentificationType)
+            }
         }
-
-        val phone = (phoneTextInputLayout.editText?.text ?: "").toString()
-        val city = (cityTextInputLayout.editText?.text ?: "").toString()
-        val address = (addressTextInputLayout.editText?.text ?: "").toString()
-        val shipper = (shipperTextInputLayout.editText?.text ?: "").toString()
-        val dateSent = (dateSentTextInputLayout.editText?.text ?: "").toString()
-
-        val client = Client(
-                "",
-                name,
-                lastName,
-                identificationNumber,
-                IdentificationType.CC,
-                PhoneCode.COP,
-                phone,
-                city,
-                address)
-
-        val order = Order(
-                "",
-                OrderState.RECEIVED,
-                "",
-                dateSent,
-                client,
-                listOf(),
-                shipper)
-
-        val intent = Intent()
-        intent.putExtra("String",true)
-        setResult(5, intent)
-        finish()
     }
+
+    private fun saveOrder() {
+        client.identificationType = documentTypes[binding.identificationTypeSpinner.selectedItemPosition]
+        viewModel.saveOrder(order, client) { success ->
+            this.runOnUiThread {
+                if (success) {
+                    finish()
+                } else {
+                    val toast = Toast.makeText(applicationContext, "Error no fue posible guardar la orden", Toast.LENGTH_SHORT)
+                    toast.show()
+                }
+            }
+        }
+    }
+
+    private fun showDatePickerDialog() {
+        val newFragment = DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener { _, year, month, day ->
+            val simpleDateFormat = SimpleDateFormat("d 'de' MMMM yyyy")
+            var format = ""
+            try {
+                val calendar = Calendar.getInstance()
+                calendar[year, month] = day
+                format = simpleDateFormat.format(calendar.time)
+                order.dateSent = calendar.timeInMillis
+            } catch (e: Exception) {
+                format = ""
+            }
+            binding.dateSentTextinputlayout.editText?.setText(format)
+        })
+
+        newFragment.show(supportFragmentManager, "datePicker")
+    }
+
+    private fun setOrderSentDate(timestamp: Long) {
+        val simpleDateFormat = SimpleDateFormat("d 'de' MMMM yyyy")
+        val format = simpleDateFormat.format(Date(timestamp))
+        binding.dateSentTextinputlayout.editText?.setText(format)
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        val selected = documentTypes[p2];
+    }
+
 }
