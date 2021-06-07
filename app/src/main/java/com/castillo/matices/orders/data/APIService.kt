@@ -54,4 +54,16 @@ interface APIService {
     @GET("color/")
     suspend fun getColors(): Response<DataResponse<List<Color>>>
 
+    // Stamp
+    @GET("stamp/")
+    suspend fun getStamps(): Response<DataResponse<List<Stamp>>>
+
+    // Stamp
+    @GET("stamp/")
+    suspend fun addOrUpdateStamp(): Response<DataResponse<List<Stamp>>>
+
+    // Stamp
+    @GET("stamp/")
+    suspend fun deleteStamp(): Response<DataResponse<List<Stamp>>>
+
 }

@@ -14,7 +14,6 @@ import com.castillo.matices.orders.sections.add_order.AddOrderActivity
 import com.castillo.matices.orders.models.Order
 import com.castillo.matices.orders.models.Product
 import com.castillo.matices.orders.sections.add_products.AddProductActivity
-import com.castillo.matices.orders.sections.home.HomeViewModel
 import com.castillo.matices.orders.viewmodels.OrderViewModel
 
 class OrderDetailActivity : AppCompatActivity(), OrderDetailAdapter.OnProductClickListener, OrderDetailAdapter.OnCheckedChangedListener {
@@ -32,6 +31,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailAdapter.OnProductCli
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_order_detail)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order_detail)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setTitle(R.string.order_detail)
 

@@ -35,6 +35,7 @@ class AddProductActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_add_product)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_product)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 

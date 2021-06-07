@@ -8,16 +8,30 @@
             type="com.castillo.matices.orders.viewmodels.ProductViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".sections.add_products.AddProductActivity">
 
-        <ScrollView
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.Orders.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Nombre del producto"
                         android:text="@={productViewModel.name}"
-                        android:inputType="text"/>
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -112,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Estampado"
                         android:text="@={productViewModel.stamp}"
-                        android:inputType="text"/>
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -128,19 +142,18 @@
                         android:layout_height="wrap_content"
                         android:hint="Comentarios"
                         android:text="@={productViewModel.description}"
-                        android:inputType="text"/>
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/delete_product"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Eliminar"
-                    />
+                    android:text="Eliminar" />
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

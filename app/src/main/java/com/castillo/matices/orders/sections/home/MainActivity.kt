@@ -6,92 +6,68 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
 import com.castillo.matices.orders.R
 import com.castillo.matices.orders.databinding.ActivityMainBinding
 import com.castillo.matices.orders.sections.add_order.AddOrderActivity
 import com.castillo.matices.orders.sections.order_detail.OrderDetailActivity
+import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity(), OrderAdapter.OnOrderClickListener {
+
+class MainActivity : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: OrderAdapter
-    private var homeViewModel = HomeViewModel()
-
-    private val ADD_ORDER_ACTIVITY_RESULT_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setSupportActionBar(binding.toolbar)
 
-        setTitle(R.string.orders)
+        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
-        setupRecyclerView()
+        binding.navigationView.setNavigationItemSelectedListener(this)
+        val menuItem: MenuItem = binding.navigationView.getMenu().getItem(0)
+        onNavigationItemSelected(menuItem)
+        menuItem.isChecked = true
     }
 
-    override fun onResume() {
-        super.onResume()
-        getOrders()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.home_menu,menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_add_order -> {
-                navigateToAddOrder()
-                true
-            }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 
-    override fun onOrderClick(position: Int) {
-        Log.e("TAG","MESSAGE $position")
-        val order = adapter.orders[position]
-        val activity = Intent(this, OrderDetailActivity::class.java)
-        activity.putExtra("order", order)
-        startActivity(activity)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode === ADD_ORDER_ACTIVITY_RESULT_CODE) {
-            getOrders()
-        }
-
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    private fun navigateToAddOrder() {   
-        val activity = Intent(this, AddOrderActivity::class.java)
-        startActivityForResult(activity, ADD_ORDER_ACTIVITY_RESULT_CODE);
-    }
-
-    private fun setupRecyclerView() {
-        adapter = OrderAdapter(this, listOf(), this)
-        binding.ordersRecyclerView?.adapter = adapter
-        binding.ordersRecyclerView?.layoutManager = LinearLayoutManager(this)
-    }
-
-    private fun getOrders() {
-        homeViewModel.getOrders { orders, error ->
-            this.runOnUiThread {
-                if (!error.isEmpty()) {
-                    val toast = Toast.makeText(applicationContext, error, Toast.LENGTH_SHORT)
-                    toast.show()
-                } else {
-                    adapter.updateOrders(orders)
-                }
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_order_list -> {
+                setTitle(R.string.orders)
+                val fragment: Fragment = OrderListFragment.newInstance()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.home_content, fragment)
+                    .commit()
+            }
+            R.id.nav_stamp_list -> {
+                setTitle(R.string.stamps)
+                val fragment: Fragment = StampListFragment.newInstance()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.home_content, fragment)
+                    .commit()
             }
         }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
 }

@@ -32,5 +32,10 @@
     <string name="add_product">Agregar producto</string>
     <string name="edit_product">Editar producto</string>
     <string name="edit_order">Editar detalles del pedido</string>
+    <string name="navigation_drawer_open">Abrir menu</string>
+    <string name="navigation_drawer_close">Cerrar menu</string>
+    <string name="stamps">Estampados</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -31,6 +31,7 @@ class AddOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_add_order)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_order)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val editingOrder = intent.getParcelableExtra<Order>("order")
