@@ -44,3 +44,12 @@ class AddProductToOrderRequest(order: Order, product: Product) {
     var orderId = order.id
     var productId = product.id
 }
+
+class StampRequest(val stamp: Stamp, image64: String) {
+    @SerializedName("_id")
+    var id = stamp.id
+    var name = stamp.name
+    var imageBase64 = image64
+}
+
+

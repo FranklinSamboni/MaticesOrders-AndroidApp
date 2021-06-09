@@ -23,7 +23,7 @@ class ClientRepository {
                     val client =  bodyReponse.data
                     completion(client)
                 } else {
-                    Log.e("API_Error", "createClient Error " + call.errorBody())
+                    Log.e("API_Error", "createClient Error " + call.errorBody()?.string())
                     completion(null)
                 }
             } catch (e: Exception) {

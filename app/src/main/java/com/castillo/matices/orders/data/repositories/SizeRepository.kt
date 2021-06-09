@@ -19,7 +19,7 @@ class SizeRepository {
                     val sizes = bodyReponse?.data ?: emptyList()
                     completion(sizes)
                 } else {
-                    Log.e("API_Error", "getSizes Error " + call.errorBody())
+                    Log.e("API_Error", "getSizes Error " + call.errorBody()?.string())
                     completion(emptyList())
                 }
             } catch (e: Exception) {

@@ -9,6 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.castillo.matices.orders.R
 import com.castillo.matices.orders.databinding.FragmentStampListBinding
+import com.castillo.matices.orders.models.Product
+import com.castillo.matices.orders.models.Stamp
+import com.castillo.matices.orders.sections.add_products.AddProductActivity
+import com.castillo.matices.orders.sections.add_stamp.AddStampActivity
 
 
 /**
@@ -57,7 +61,7 @@ class StampListFragment : Fragment(), StampAdapter.OnStampClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_add_stamp -> {
-                navigateToAddStamp()
+                navigateToAddStamp(null)
                 true
             }
             else -> {
@@ -69,6 +73,7 @@ class StampListFragment : Fragment(), StampAdapter.OnStampClickListener {
     override fun onStampClick(position: Int) {
         Log.e("TAG","MESSAGE $position")
         val stamp = adapter.stamps[position]
+        navigateToAddStamp(stamp)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -78,7 +83,10 @@ class StampListFragment : Fragment(), StampAdapter.OnStampClickListener {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun navigateToAddStamp() {
+    private fun navigateToAddStamp(stamp: Stamp?) {
+        val activity = Intent(activity, AddStampActivity::class.java)
+        activity.putExtra("stamp", stamp)
+        startActivityForResult(activity, ADD_STAMP_ACTIVITY_RESULT_CODE)
     }
 
     private fun setupRecyclerView() {

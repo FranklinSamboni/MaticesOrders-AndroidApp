@@ -19,7 +19,7 @@ class DocumentRepository {
                     val orders = bodyReponse?.data ?: emptyList()
                     completion(orders)
                 } else {
-                    Log.e("API_Error", "getDocumentTypes Erro " + call.errorBody())
+                    Log.e("API_Error", "getDocumentTypes Erro " + call.errorBody()?.string())
                     completion(emptyList())
                 }
             } catch (e: Exception) {

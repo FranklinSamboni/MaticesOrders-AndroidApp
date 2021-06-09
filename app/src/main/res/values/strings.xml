@@ -37,5 +37,7 @@
     <string name="stamps">Estampados</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_stamp">Editar estampado</string>
+    <string name="add_stamp">Agregar estampado</string>
 
 </resources>

@@ -11,14 +11,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Orders">
-        <activity android:name="com.castillo.matices.orders.sections.add_products.AddProductActivity"></activity>
+        android:theme="@style/Theme.Orders"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".sections.add_stamp.AddStampActivity"></activity>
+        <activity android:name=".sections.add_products.AddProductActivity" />
         <activity
-            android:name="com.castillo.matices.orders.sections.order_detail.OrderDetailActivity"
+            android:name=".sections.order_detail.OrderDetailActivity"
             android:label="@string/title_activity_order_detail" />
-        <activity android:name="com.castillo.matices.orders.sections.add_order.AddOrderActivity" />
-        <activity android:name="com.castillo.matices.orders.sections.home.MainActivity">
+        <activity android:name=".sections.add_order.AddOrderActivity" />
+        <activity android:name=".sections.home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

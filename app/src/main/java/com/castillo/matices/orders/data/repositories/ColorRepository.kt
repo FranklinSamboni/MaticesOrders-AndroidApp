@@ -20,7 +20,7 @@ class ColorRepository {
                     val colors = bodyReponse?.data ?: emptyList()
                     completion(colors)
                 } else {
-                    Log.e("API_Error", "getColors Error " + call.errorBody())
+                    Log.e("API_Error", "getColors Error " + call.errorBody()?.string())
                     completion(emptyList())
                 }
             } catch (e: Exception) {

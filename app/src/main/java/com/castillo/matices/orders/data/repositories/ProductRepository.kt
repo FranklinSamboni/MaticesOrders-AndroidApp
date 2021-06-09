@@ -29,7 +29,7 @@ class ProductRepository {
                     val product = bodyReponse.data
                     completion(product)
                 } else {
-                    Log.e("API_Error", "createProduct Error " + call.errorBody())
+                    Log.e("API_Error", "createProduct Error " + call.errorBody()?.string())
                     completion(null)
                 }
             } catch (e: Exception) {
@@ -51,7 +51,7 @@ class ProductRepository {
                     }
 
                 } else {
-                    Log.e("API_Error", "updateProduct Error " + call.errorBody())
+                    Log.e("API_Error", "updateProduct Error " + call.errorBody()?.string())
                     completion(null)
                 }
             } catch (e: Exception) {
@@ -72,7 +72,7 @@ class ProductRepository {
                     }
 
                 } else {
-                    Log.e("API_Error", "deleteProduct Error " + call.errorBody())
+                    Log.e("API_Error", "deleteProduct Error " + call.errorBody()?.string())
                     completion(false)
                 }
             } catch (e: Exception) {

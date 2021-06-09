@@ -58,12 +58,14 @@ interface APIService {
     @GET("stamp/")
     suspend fun getStamps(): Response<DataResponse<List<Stamp>>>
 
-    // Stamp
-    @GET("stamp/")
-    suspend fun addOrUpdateStamp(): Response<DataResponse<List<Stamp>>>
+    @POST("stamp/")
+    suspend fun createStamp(@Body stampRequest: StampRequest): Response<DataResponse<Stamp>>
 
-    // Stamp
-    @GET("stamp/")
-    suspend fun deleteStamp(): Response<DataResponse<List<Stamp>>>
+    @PUT("stamp/")
+    suspend fun updateStamp(@Body stampRequest: StampRequest): Response<DataResponse<Stamp>>
+
+
+    @HTTP(method = "DELETE", path = "stamp/", hasBody = true)
+    suspend fun deleteStamp(@Body stampRequest: StampRequest): Response<DataResponse<Stamp>>
 
 }

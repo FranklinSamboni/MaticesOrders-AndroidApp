@@ -31,7 +31,7 @@ class OrderRepository {
                         completion(true)
                     }
                 } else {
-                    Log.e("API_Error", "AddOrderAPI Error " + call.errorBody())
+                    Log.e("API_Error", "AddOrderAPI Error " + call.errorBody()?.string())
                     completion(false)
                 }
             } catch (e: Exception) {
@@ -52,7 +52,7 @@ class OrderRepository {
                         completion(true)
                     }
                 } else {
-                    Log.e("API_Error", "AddOrderAPI Error " +  call.errorBody())
+                    Log.e("API_Error", "AddOrderAPI Error " +  call.errorBody()?.string())
                     completion(false)
                 }
             } catch (e: Exception) {
@@ -79,8 +79,8 @@ class OrderRepository {
                         }
 
                     } else {
-                        Log.e("API_Error", "GetOrderAPI Error " + call.errorBody())
-                        completion(emptyList(), call.errorBody().toString())
+                        Log.e("API_Error", "GetOrderAPI Error " + call.errorBody()?.string())
+                        completion(emptyList(), call.errorBody()?.string() ?: "")
                     }
                 } catch (e: Exception) {
                     Log.e("API_Error", "GetOrderAPI Error" + e.localizedMessage)
@@ -137,7 +137,7 @@ class OrderRepository {
                         completion(true)
                     }
                 } else {
-                    Log.e("API_Error", "addProducToOrder Error " + call.errorBody())
+                    Log.e("API_Error", "addProducToOrder Error " + call.errorBody()?.string())
                     completion(false)
                 }
             } catch (e: Exception) {
@@ -157,7 +157,7 @@ class OrderRepository {
                         completion(true)
                     }
                 } else {
-                    Log.e("API_Error", "deleteOrder Error " + call.errorBody())
+                    Log.e("API_Error", "deleteOrder Error " + call.errorBody()?.string())
                     completion(false)
                 }
             } catch (e: Exception) {
