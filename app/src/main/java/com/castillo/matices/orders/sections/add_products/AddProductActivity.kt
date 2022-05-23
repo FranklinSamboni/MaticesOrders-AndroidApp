@@ -1,7 +1,7 @@
 package com.castillo.matices.orders.sections.add_products
 
 import android.content.DialogInterface
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,17 +10,19 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
 import com.castillo.matices.orders.R
 import com.castillo.matices.orders.databinding.ActivityAddProductBinding
-import com.castillo.matices.orders.models.Color
-import com.castillo.matices.orders.models.Order
-import com.castillo.matices.orders.models.Product
-import com.castillo.matices.orders.models.Size
+import com.castillo.matices.orders.models.*
+import com.castillo.matices.orders.sections.stamp_list.StampListContainerActivity
+import com.castillo.matices.orders.sections.stamp_list.StampListFragment
 import com.castillo.matices.orders.viewmodels.ProductViewModel
-import java.util.*
 
 class AddProductActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+
+    private val SELECT_STAMP_ACTIVITY_RESULT_CODE = 1
 
     private lateinit var binding: ActivityAddProductBinding
     private val viewModel = AddProductViewModel()
@@ -56,6 +58,10 @@ class AddProductActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         binding.productViewModel = productViewModel
         binding.deleteProduct.setOnClickListener { view ->
             onDeleteProductAction()
+        }
+
+        binding.selectStamp.setOnClickListener { view ->
+            navigateToStampList()
         }
 
         viewModel.getColors { colors ->
@@ -99,8 +105,10 @@ class AddProductActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         productViewModel.size = sizes[binding.sizeSpinner.selectedItemPosition]
         productViewModel.color = colors[binding.colorSpinner.selectedItemPosition]
 
+        binding.indeterminateProgressBar.visibility = View.VISIBLE
         viewModel.saveProduct(order, productViewModel.product) { success ->
             this.runOnUiThread {
+                binding.indeterminateProgressBar.visibility = View.GONE
                 if (success) {
                     finish()
                 } else {
@@ -150,6 +158,11 @@ class AddProductActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         alertDialog?.show();
     }
 
+    private fun navigateToStampList() {
+        val activity = Intent(this, StampListContainerActivity::class.java)
+        startActivityForResult(activity, SELECT_STAMP_ACTIVITY_RESULT_CODE)
+    }
+
     private fun deleteProduct() {
         viewModel.deleteProduct(productViewModel.product) { success ->
             this.runOnUiThread {
@@ -168,5 +181,14 @@ class AddProductActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val stamp = data?.getParcelableExtra<Stamp>("stamp")
+        if (requestCode == SELECT_STAMP_ACTIVITY_RESULT_CODE && stamp != null) {
+            productViewModel.stamp = stamp
+            binding.invalidateAll()
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

@@ -49,7 +49,6 @@ class ProductRepository {
                     saveProductLocally(product) {
                         completion(product)
                     }
-
                 } else {
                     Log.e("API_Error", "updateProduct Error " + call.errorBody()?.string())
                     completion(null)
@@ -132,6 +131,5 @@ class ProductRepository {
             return null
         }
     }
-
 
 }

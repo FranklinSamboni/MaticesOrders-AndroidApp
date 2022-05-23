@@ -1,4 +1,4 @@
-package com.castillo.matices.orders.sections.home
+package com.castillo.matices.orders.sections.stamp_list
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,9 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.castillo.matices.orders.R
 import com.castillo.matices.orders.databinding.FragmentStampListBinding
-import com.castillo.matices.orders.models.Product
 import com.castillo.matices.orders.models.Stamp
-import com.castillo.matices.orders.sections.add_products.AddProductActivity
 import com.castillo.matices.orders.sections.add_stamp.AddStampActivity
 
 
@@ -25,8 +23,10 @@ class StampListFragment : Fragment(), StampAdapter.OnStampClickListener {
     private val ADD_STAMP_ACTIVITY_RESULT_CODE = 1
 
     private lateinit var binding: FragmentStampListBinding
-    private lateinit var adapter: StampAdapter
+    lateinit var adapter: StampAdapter
     private var stampListViewModel = StampListViewModel()
+
+    var stampClickListener: StampAdapter.OnStampClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +90,10 @@ class StampListFragment : Fragment(), StampAdapter.OnStampClickListener {
     }
 
     private fun setupRecyclerView() {
-        adapter = StampAdapter(requireContext(), listOf(), this)
+
+        val clickListener = stampClickListener ?: this
+
+        adapter = StampAdapter(requireContext(), listOf(), clickListener)
         binding.stampsRecyclerView.adapter = adapter
         binding.stampsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
@@ -118,9 +121,15 @@ class StampListFragment : Fragment(), StampAdapter.OnStampClickListener {
          * @return A new instance of fragment StampListFragment.
          */
         @JvmStatic
-        fun newInstance() =
-            StampListFragment().apply {
-                arguments = Bundle().apply {}
+        fun newInstance(stampClickListener: StampAdapter.OnStampClickListener? = null): StampListFragment {
+            val fragment = StampListFragment()
+            fragment.apply {
+                arguments = Bundle().apply {
+                }
             }
+
+            fragment.stampClickListener = stampClickListener
+            return fragment
+        }
     }
 }

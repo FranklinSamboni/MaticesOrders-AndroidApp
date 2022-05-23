@@ -2,8 +2,6 @@ package com.castillo.matices.orders.data
 
 import com.castillo.matices.orders.models.*
 import com.google.gson.annotations.SerializedName
-import io.realm.RealmList
-import io.realm.annotations.PrimaryKey
 
 class OrderRequest(val order: Order) {
     @SerializedName("_id")
@@ -34,7 +32,7 @@ class ProductRequest(val product: Product) {
     var name = product.name
     var size = product.size?.name ?: ""
     var color = product.color?.name ?: ""
-    var stamp = product.stamp
+    var stampRef = product.stampRef?.name ?: ""
     var description = product.description
     var isStampCutted = product.isStampCutted
     var price = product.price

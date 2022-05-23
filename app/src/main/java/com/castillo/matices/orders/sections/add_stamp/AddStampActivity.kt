@@ -1,17 +1,15 @@
 package com.castillo.matices.orders.sections.add_stamp
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +18,6 @@ import androidx.databinding.DataBindingUtil
 import com.castillo.matices.orders.R
 import com.castillo.matices.orders.databinding.ActivityAddStampBinding
 import com.castillo.matices.orders.models.Stamp
-import java.io.ByteArrayOutputStream
 
 
 class AddStampActivity : AppCompatActivity() {

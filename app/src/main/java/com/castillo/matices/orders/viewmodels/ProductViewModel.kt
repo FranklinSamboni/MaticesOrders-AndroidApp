@@ -3,6 +3,7 @@ package com.castillo.matices.orders.viewmodels
 import com.castillo.matices.orders.models.Color
 import com.castillo.matices.orders.models.Product
 import com.castillo.matices.orders.models.Size
+import com.castillo.matices.orders.models.Stamp
 import java.text.NumberFormat
 import java.util.*
 
@@ -41,11 +42,11 @@ class ProductViewModel(var product: Product) {
         }
         set(value) {}
 
-    var stamp: String
+    var stamp: Stamp?
         get() {
-            return product.stamp
+            return product.stampRef
         }
-        set(value) { product.stamp = value }
+        set(value) { product.stampRef = value }
 
     var description: String
         get() {
@@ -77,5 +78,13 @@ class ProductViewModel(var product: Product) {
 
     fun getColorDisplayText(): String {
         return "Color: ${product.color?.name}"
+    }
+
+    fun stampName(): String {
+        return stamp?.name ?: "Selecciona estampado"
+    }
+
+    fun getStampFullURL(): String {
+        return stamp?.getFullURL() ?: "https://i.vimeocdn.com/portrait/1274237_300x300.jpg"
     }
 }

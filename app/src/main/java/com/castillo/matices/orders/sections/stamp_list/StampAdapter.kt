@@ -1,4 +1,4 @@
-package com.castillo.matices.orders.sections.home
+package com.castillo.matices.orders.sections.stamp_list
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -16,7 +16,10 @@ class StampAdapter(private val context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding: TemplateStampItemBinding = TemplateStampItemBinding.inflate(layoutInflater, parent, false)
-        return StampViewHolder(binding, onStampClickListener)
+        return StampViewHolder(
+            binding,
+            onStampClickListener
+        )
     }
 
     override fun getItemCount(): Int {

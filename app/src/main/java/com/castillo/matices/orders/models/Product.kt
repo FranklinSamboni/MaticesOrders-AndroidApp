@@ -10,23 +10,24 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 open class Product(
-        @SerializedName("_id")
-        @PrimaryKey
-        var id: String = "",
-        var name: String = "",
-        var size: Size? = null,
-        var color: Color? = null,
-        var stamp: String = "",
-        var description: String = "",
-        var isStampCutted: Boolean = false,
-        var price: Double = 0.0) : RealmObject(), Parcelable {
+    @SerializedName("_id")
+    @PrimaryKey
+    var id: String = "",
+    var name: String = "",
+    var size: Size? = null,
+    var color: Color? = null,
+    var stampRef: Stamp? = null,
+    var description: String = "",
+    var isStampCutted: Boolean = false,
+    var price: Double = 0.0
+) : RealmObject(), Parcelable {
 
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readParcelable(Size::class.java.classLoader),
         parcel.readParcelable(Color::class.java.classLoader),
-        parcel.readString()!!,
+        parcel.readParcelable(Stamp::class.java.classLoader),
         parcel.readString()!!,
         parcel.readByte() != 0.toByte(),
         parcel.readDouble()
@@ -40,7 +41,7 @@ open class Product(
             parcel.writeString(name)
             parcel.writeParcelable(size, flags)
             parcel.writeParcelable(color, flags)
-            parcel.writeString(stamp)
+            parcel.writeParcelable(stampRef, flags)
             parcel.writeString(description)
             parcel.writeByte(if (isStampCutted) 1 else 0)
             parcel.writeDouble(price)

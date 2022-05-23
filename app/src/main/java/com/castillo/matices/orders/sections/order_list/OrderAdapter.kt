@@ -1,4 +1,4 @@
-package com.castillo.matices.orders.sections.home
+package com.castillo.matices.orders.sections.order_list
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -17,7 +17,10 @@ class OrderAdapter(private val context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding: TemplateOrderItemBinding = TemplateOrderItemBinding.inflate(layoutInflater, parent, false)
-        return OrderViewHolder(binding, onOrderClickListener)
+        return OrderViewHolder(
+            binding,
+            onOrderClickListener
+        )
     }
 
     override fun getItemCount(): Int {

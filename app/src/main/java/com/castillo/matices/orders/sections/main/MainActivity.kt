@@ -1,11 +1,7 @@
-package com.castillo.matices.orders.sections.home
+package com.castillo.matices.orders.sections.main
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -13,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.castillo.matices.orders.R
 import com.castillo.matices.orders.databinding.ActivityMainBinding
-import com.castillo.matices.orders.sections.add_order.AddOrderActivity
-import com.castillo.matices.orders.sections.order_detail.OrderDetailActivity
+import com.castillo.matices.orders.sections.order_list.OrderListFragment
+import com.castillo.matices.orders.sections.stamp_list.StampListFragment
 import com.google.android.material.navigation.NavigationView
 
 
@@ -68,6 +64,7 @@ class MainActivity : AppCompatActivity(),
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
+
     }
 
 }

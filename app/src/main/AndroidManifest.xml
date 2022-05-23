@@ -15,11 +15,12 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".sections.add_stamp.AddStampActivity"></activity>
         <activity android:name=".sections.add_products.AddProductActivity" />
+        <activity android:name=".sections.stamp_list.StampListContainerActivity" />
         <activity
             android:name=".sections.order_detail.OrderDetailActivity"
             android:label="@string/title_activity_order_detail" />
         <activity android:name=".sections.add_order.AddOrderActivity" />
-        <activity android:name=".sections.home.MainActivity">
+        <activity android:name=".sections.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

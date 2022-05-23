@@ -1,4 +1,4 @@
-package com.castillo.matices.orders.sections.home
+package com.castillo.matices.orders.sections.order_list
 
 import com.castillo.matices.orders.data.repositories.OrderRepository
 import com.castillo.matices.orders.models.*

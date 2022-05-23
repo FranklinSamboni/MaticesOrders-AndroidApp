@@ -1,4 +1,4 @@
-package com.castillo.matices.orders.sections.home
+package com.castillo.matices.orders.sections.stamp_list
 
 import com.castillo.matices.orders.data.repositories.StampRepository
 import com.castillo.matices.orders.models.Stamp

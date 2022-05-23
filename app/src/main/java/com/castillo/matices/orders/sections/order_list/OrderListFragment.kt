@@ -1,4 +1,4 @@
-package com.castillo.matices.orders.sections.home
+package com.castillo.matices.orders.sections.order_list
 
 import android.content.Intent
 import android.os.Bundle
@@ -24,7 +24,8 @@ class OrderListFragment : Fragment(), OrderAdapter.OnOrderClickListener {
 
     private lateinit var binding: FragmentOrderListBinding
     private lateinit var adapter: OrderAdapter
-    private var orderListViewModel = OrderListViewModel()
+    private var orderListViewModel =
+        OrderListViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,11 +86,15 @@ class OrderListFragment : Fragment(), OrderAdapter.OnOrderClickListener {
 
     private fun navigateToAddOrder() {
         val activity = Intent(activity, AddOrderActivity::class.java)
-        startActivityForResult(activity, ADD_ORDER_ACTIVITY_RESULT_CODE);
+        startActivityForResult(activity, ADD_ORDER_ACTIVITY_RESULT_CODE)
     }
 
     private fun setupRecyclerView() {
-        adapter = OrderAdapter(requireContext(), listOf(), this)
+        adapter = OrderAdapter(
+            requireContext(),
+            listOf(),
+            this
+        )
         binding.ordersRecyclerView.adapter = adapter
         binding.ordersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
@@ -119,7 +124,9 @@ class OrderListFragment : Fragment(), OrderAdapter.OnOrderClickListener {
         @JvmStatic
         fun newInstance() =
             OrderListFragment().apply {
-                arguments = Bundle().apply {}
+                arguments = Bundle().apply {
+
+                }
             }
     }
 }
