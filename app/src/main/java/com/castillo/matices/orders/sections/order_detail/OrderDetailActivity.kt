@@ -35,7 +35,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailAdapter.OnProductCli
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setTitle(R.string.order_detail)
 
-        orderViewModel = OrderViewModel(intent.getParcelableExtra<Order>("order"))
+        orderViewModel = OrderViewModel(intent.getParcelableExtra<Order>("order")!!)
         binding.content.orderViewModel = orderViewModel
         setupRecyclerView()
 

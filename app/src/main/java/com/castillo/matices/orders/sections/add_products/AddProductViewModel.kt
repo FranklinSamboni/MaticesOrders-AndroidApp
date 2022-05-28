@@ -37,7 +37,7 @@ class AddProductViewModel {
                 }
             }
         } else {
-,            productRepository.updateProduct(productRequest) { productUpdated ->
+            productRepository.updateProduct(productRequest) { productUpdated ->
                 if (productUpdated != null) {
                     completion(true)
                 } else {

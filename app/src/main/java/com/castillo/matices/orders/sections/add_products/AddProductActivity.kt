@@ -41,7 +41,7 @@ class AddProductActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-        order = intent.getParcelableExtra<Order>("order")
+        order = intent.getParcelableExtra<Order>("order")!!
         val editingProduct = intent.getParcelableExtra<Product>("product")
 
         if (editingProduct != null) {
